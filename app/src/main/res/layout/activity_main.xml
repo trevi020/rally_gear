@@ -49,4 +49,17 @@
         android:textColor="#555555"
         android:textSize="12sp" />
 
+    <!-- Valori grezzi ricevuti dall'auto (debug), nell'angolo in basso a destra -->
+    <TextView
+        android:id="@+id/tvRaw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:text="gear=-  rpm=-"
+        android:textColor="#555555"
+        android:textSize="12sp" />
+
 </RelativeLayout>

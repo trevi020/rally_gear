@@ -7,12 +7,12 @@ android {
     // Obbligatorio con AGP 8+: sostituisce l'attributo package="..." del Manifest.
     // Deve coincidere con il package dichiarato nei file .kt.
     namespace 'io.bimmergestalt.idriveconnectaddons.rallygear'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "io.bimmergestalt.idriveconnectaddons.rallygear"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
     }

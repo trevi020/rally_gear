@@ -35,6 +35,19 @@ class MainModel(app: Application) : AndroidViewModel(app) {
         addSource(rpmSource) { update() }
     }
 
+    /** Valori esattamente come arrivano dall'auto, senza interpretazione (debug, in basso a destra) */
+    val raw: LiveData<String> = MediatorLiveData<String>().apply {
+        val update = { value = describeRaw(gearSource.value, rpmSource.value) }
+        addSource(gearSource) { update() }
+        addSource(rpmSource) { update() }
+    }
+
+    private fun describeRaw(gear: CdsState?, rpm: CdsState?): String {
+        val g = (gear as? CdsState.Value)?.values?.get("gear")?.toString() ?: "-"
+        val r = (rpm as? CdsState.Value)?.values?.get("RPMSpeed")?.toString() ?: "-"
+        return "gear=$g  rpm=$r"
+    }
+
     private fun rawGear(state: CdsState.Value): Int? = (state.values["gear"] as? Number)?.toInt()
 
     private fun rawRpm(state: CdsState.Value): Int? = (state.values["RPMSpeed"] as? Number)?.toInt()
@@ -48,11 +61,8 @@ class MainModel(app: Application) : AndroidViewModel(app) {
                 "Permesso CDS negato: reinstalla Rally Gear dopo aver installato AAIdrive"
             states.all { it is CdsState.Unavailable } ->
                 "AAIdrive non raggiungibile (installato? versione recente? auto collegata?)"
-            states.any { it is CdsState.Value } -> {
-                val g = (gear as? CdsState.Value)?.let { rawGear(it) }
-                val r = (rpm as? CdsState.Value)?.let { rawRpm(it) }
-                "CDS ok · marcia grezza: ${g ?: "-"} · giri: ${r ?: "-"}"
-            }
+            states.any { it is CdsState.Value } ->
+                "CDS ok: dati ricevuti da AAIdrive"
             else ->
                 "In attesa dei dati dall'auto…"
         }
@@ -65,7 +75,7 @@ class MainModel(app: Application) : AndroidViewModel(app) {
          * Conversione del valore grezzo di driving.gear, secondo la documentazione CDS:
          *   1 = N, 2 = R, 3 = P, 4 e oltre = D1, D2, D3...
          * Se sulla tua auto le marce risultano sfasate, correggi solo questa funzione
-         * (la riga di stato in basso mostra il valore grezzo ricevuto).
+         * (il valore grezzo ricevuto e' mostrato in basso a destra).
          */
         fun gearLabel(raw: Int?): String = when {
             raw == null -> NO_GEAR

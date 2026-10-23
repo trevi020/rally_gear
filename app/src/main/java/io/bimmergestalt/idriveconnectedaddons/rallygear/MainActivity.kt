@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var model: MainModel
     private lateinit var tvGearDigit: TextView
     private lateinit var tvStatus: TextView
+    private lateinit var tvRaw: TextView
     private lateinit var leds: List<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         tvGearDigit = findViewById(R.id.tvGearDigit)
         tvStatus = findViewById(R.id.tvStatus)
+        tvRaw = findViewById(R.id.tvRaw)
         leds = listOf<View>(
             findViewById(R.id.led1),
             findViewById(R.id.led2),
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         model.gear.observe(this) { gear -> tvGearDigit.text = gear }
         model.rpm.observe(this) { rpm -> updateShiftLights(rpm) }
         model.status.observe(this) { status -> tvStatus.text = status }
+        model.raw.observe(this) { raw -> tvRaw.text = raw }
     }
 
     private fun updateShiftLights(rpm: Int) {

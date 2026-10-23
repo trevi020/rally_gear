@@ -9,7 +9,8 @@
 * **Indicatore marcia a 7 segmenti** (font `DSEG7`): `N`, `R`, `P`, `1`, `2`, ... oppure `-` se il dato non c'è.
 * **Shift light a 5 LED** (verde → giallo → rosso) in base agli RPM.
 * **Schermo sempre acceso**, a tutto schermo, in orizzontale.
-* **Riga di stato** in basso (grigio scuro) che mostra se i dati di AAIdrive arrivano e il valore grezzo della marcia.
+* **Riga di stato** in basso al centro (grigio scuro): dice se i dati di AAIdrive arrivano.
+* **Valori grezzi di debug** in basso a destra (`gear=… rpm=…`): i numeri esattamente come li invia l'auto, senza interpretazione.
 
 ---
 
@@ -40,7 +41,7 @@ Riferimenti: [documentazione CDS](https://bimmergestalt.github.io/BMWConnectedAn
 
 ### Conversione della marcia
 
-Secondo la documentazione CDS, `driving.gear` vale `1 = N`, `2 = R`, `3 = P`, `4 e oltre = D1, D2, D3...`. Rally Gear mostra quindi `valore − 3` per i valori ≥ 4. Se sulla tua auto le marce risultano sfasate, guarda il valore grezzo nella riga di stato in basso e correggi la funzione `MainModel.gearLabel()`.
+Secondo la documentazione CDS, `driving.gear` vale `1 = N`, `2 = R`, `3 = P`, `4 e oltre = D1, D2, D3...`. Rally Gear mostra quindi `valore − 3` per i valori ≥ 4. Se sulla tua auto le marce risultano sfasate, guarda il valore grezzo in basso a destra e correggi la funzione `MainModel.gearLabel()`.
 
 ---
 
