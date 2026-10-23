@@ -6,15 +6,14 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var model: MainModel
     private lateinit var tvGearDigit: TextView
-    private lateinit var led1: View
-    private lateinit var led2: View
-    private lateinit var led3: View
-    private lateinit var led4: View
-    private lateinit var led5: View
+    private lateinit var tvStatus: TextView
+    private lateinit var leds: List<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +29,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         tvGearDigit = findViewById(R.id.tvGearDigit)
-        led1 = findViewById(R.id.led1)
-        led2 = findViewById(R.id.led2)
-        led3 = findViewById(R.id.led3)
-        led4 = findViewById(R.id.led4)
-        led5 = findViewById(R.id.led5)
+        tvStatus = findViewById(R.id.tvStatus)
+        leds = listOf<View>(
+            findViewById(R.id.led1),
+            findViewById(R.id.led2),
+            findViewById(R.id.led3),
+            findViewById(R.id.led4),
+            findViewById(R.id.led5)
+        )
 
         // Caricamento Font 7-Segmenti
         try {
@@ -45,29 +47,33 @@ class MainActivity : AppCompatActivity() {
             tvGearDigit.typeface = Typeface.MONOSPACE
         }
 
-        // Osservazione dati LiveData dal MainModel
-        MainModel.instance.gearLiveData.observe(this) { gear ->
-            tvGearDigit.text = gear
-        }
+        // Valori iniziali, finché AAIdrive non invia dati
+        tvGearDigit.text = "-"
+        updateShiftLights(0)
 
-        MainModel.instance.rpmLiveData.observe(this) { rpm ->
-            updateShiftLights(rpm)
-        }
+        // Dati CDS di AAIdrive (si attivano solo mentre la schermata è visibile)
+        model = ViewModelProvider(this)[MainModel::class.java]
+        model.gear.observe(this) { gear -> tvGearDigit.text = gear }
+        model.rpm.observe(this) { rpm -> updateShiftLights(rpm) }
+        model.status.observe(this) { status -> tvStatus.text = status }
     }
 
     private fun updateShiftLights(rpm: Int) {
-        // Reset LED
-        led1.setBackgroundResource(R.drawable.led_off)
-        led2.setBackgroundResource(R.drawable.led_off)
-        led3.setBackgroundResource(R.drawable.led_off)
-        led4.setBackgroundResource(R.drawable.led_off)
-        led5.setBackgroundResource(R.drawable.led_off)
+        leds.forEachIndexed { index, led ->
+            val drawable = if (rpm >= RPM_THRESHOLDS[index]) LED_ON[index] else R.drawable.led_off
+            led.setBackgroundResource(drawable)
+        }
+    }
 
-        // Progressione RPM (Esempio: cambio consigliato a 6500 RPM)
-        if (rpm >= 3500) led1.setBackgroundResource(R.drawable.led_green)
-        if (rpm >= 4200) led2.setBackgroundResource(R.drawable.led_green)
-        if (rpm >= 5000) led3.setBackgroundResource(R.drawable.led_yellow)
-        if (rpm >= 5700) led4.setBackgroundResource(R.drawable.led_yellow)
-        if (rpm >= 6500) led5.setBackgroundResource(R.drawable.led_red)
+    companion object {
+        // Soglie RPM dei 5 LED (modificale qui): verde, verde, giallo, giallo, rosso
+        private val RPM_THRESHOLDS = intArrayOf(3500, 4200, 5000, 5700, 6500)
+        private val LED_ON = intArrayOf(
+            R.drawable.led_green,
+            R.drawable.led_green,
+            R.drawable.led_yellow,
+            R.drawable.led_yellow,
+            R.drawable.led_red
+        )
     }
 }

@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="N"
+        android:text="-"
         android:textColor="#FF0000"
         android:textSize="260sp"
         android:textStyle="bold"
@@ -36,5 +36,17 @@
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="30" />
+
+    <!-- Riga di stato della connessione con AAIdrive (grigio scuro, poco invadente) -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:text="In attesa di AAIdrive…"
+        android:textColor="#555555"
+        android:textSize="12sp" />
 
 </RelativeLayout>

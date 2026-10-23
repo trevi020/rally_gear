@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Il package ora è definito da "namespace" in app/build.gradle (richiesto da AGP 8+) -->
+<!-- Il package è definito da "namespace" in app/build.gradle (richiesto da AGP 8+) -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Permesso fondamentale per essere rilevati da AAIdrive -->
-    <uses-permission android:name="me.hacker.co.idriveconnectaddons.CONNECT" />
+    <!--
+        Permesso dichiarato da AAIdrive (protectionLevel "normal"): serve per leggere i dati CDS
+        (marcia, giri motore, ...) dal suo content provider. Viene concesso all'installazione,
+        a patto che AAIdrive sia già installato: se installi Rally Gear PRIMA di AAIdrive,
+        reinstalla Rally Gear.
+    -->
+    <uses-permission android:name="io.bimmergestalt.permission.CDS_normal" />
+
+    <!-- Android 11+: senza questa dichiarazione il content provider di AAIdrive non è visibile -->
+    <queries>
+        <provider android:authorities="io.bimmergestalt.cardata.provider" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -11,7 +21,7 @@
         android:label="Rally Gear"
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
-        <!-- Schermata Principale a Tutto Schermo sul Telefono
+        <!-- Schermata principale a tutto schermo sul telefono
              (lo schermo resta acceso grazie a FLAG_KEEP_SCREEN_ON e keepScreenOn nel layout) -->
         <activity
             android:name=".MainActivity"
@@ -23,14 +33,12 @@
             </intent-filter>
         </activity>
 
-        <!-- Servizio di connessione con AAIdrive -->
+        <!-- Rende l'app visibile nella scheda "Addons" di AAIdrive -->
         <service
             android:name=".RallyGearService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="me.hacker.co.idriveconnectaddons.CONNECT">
+            android:exported="true">
             <intent-filter>
-                <action android:name="me.hacker.co.idriveconnectaddons.CONNECT" />
+                <action android:name="io.bimmergestalt.cardata.service" />
             </intent-filter>
         </service>
 
