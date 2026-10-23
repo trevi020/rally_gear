@@ -24,6 +24,7 @@ jobs:
         cache-disabled: true
 
     - name: Build Debug APK
+      working-directory: app
       run: gradle assembleDebug --stacktrace
 
     - name: Upload APK
