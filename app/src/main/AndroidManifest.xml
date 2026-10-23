@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.bimmergestalt.idriveconnectaddons.rallygear">
+
+    <!-- Permesso fondamentale per essere rilevati da AAIdrive -->
+    <uses-permission android:name="me.hacker.co.idriveconnectaddons.CONNECT" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Rally Gear"
+        android:keepScreenOn="true"
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+
+        <!-- Schermata Principale a Tutto Schermo sul Telefono -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Servizio di connessione con AAIdrive -->
+        <service
+            android:name=".RallyGearService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="me.hacker.co.idriveconnectaddons.CONNECT">
+            <intent-filter>
+                <action android:name="me.hacker.co.idriveconnectaddons.CONNECT" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>
