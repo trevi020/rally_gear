@@ -1,17 +1,8 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20"
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+// Root build file.
+// I plugin vengono risolti tramite pluginManagement in settings.gradle.
+// NON aggiungere qui blocchi allprojects { repositories { ... } }:
+// settings.gradle usa FAIL_ON_PROJECT_REPOS e la build fallirebbe.
+plugins {
+    id 'com.android.application' version '8.2.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.22' apply false
 }

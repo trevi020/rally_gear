@@ -1,15 +1,18 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    compileSdkVersion 33
+    // Obbligatorio con AGP 8+: sostituisce l'attributo package="..." del Manifest.
+    // Deve coincidere con il package dichiarato nei file .kt.
+    namespace 'io.bimmergestalt.idriveconnectaddons.rallygear'
+    compileSdk 33
 
     defaultConfig {
         applicationId "io.bimmergestalt.idriveconnectaddons.rallygear"
-        minSdkVersion 24
-        targetSdkVersion 33
+        minSdk 24
+        targetSdk 33
         versionCode 1
         versionName "1.0"
     }

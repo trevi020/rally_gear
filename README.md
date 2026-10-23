@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/33893633/README.md)
 # Rally Gear (BimmerGestalt Addon)
 
 **Rally Gear** è un'estensione per l'ecosistema [AAIdrive](https://github.com/BimmerGestalt/AAIdrive) progettata per vetture MINI e BMW. Trasforma lo smartphone Android in un display di telemetria da competizione in stile rally.
