@@ -66,17 +66,6 @@ Modificabili in `MainActivity.kt` (`RPM_THRESHOLDS`):
 
 ---
 
-## ⚙️ Compilazione con GitHub Actions
-
-1. Fai **push** sul branch `main`.
-2. Apri la scheda **Actions** del repository e seleziona l'ultima esecuzione.
-3. Scarica lo ZIP `rally-gear-apk` dalla sezione **Artifacts**.
-4. Estrai e installa `app-debug.apk` sul telefono.
-
-Il workflow usa JDK 17 e Gradle 8.5 e lancia `gradle assembleDebug` dalla radice del progetto (non serve il gradle wrapper).
-
----
-
 ## 📲 Installazione e uso
 
 1. Installa **prima AAIdrive**, poi Rally Gear (così il permesso CDS viene concesso all'installazione; se hai fatto il contrario, reinstalla Rally Gear).
