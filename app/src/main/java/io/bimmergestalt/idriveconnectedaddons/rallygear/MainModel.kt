@@ -82,7 +82,7 @@ class MainModel(app: Application) : AndroidViewModel(app) {
             raw == 1 -> "N"
             raw == 2 -> "R"
             raw == 3 -> "P"
-            raw >= 4 -> (raw - 3).toString()
+            raw >= 4 -> (raw - 4).toString()
             else -> NO_GEAR
         }
     }
