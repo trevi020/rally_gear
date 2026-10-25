@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tema tutto nero.
+     Il tema AppCompat scuro predefinito ha lo sfondo della finestra grigio scuro (#303030): si vedeva
+     all'avvio, durante la rotazione e dove il layout non arriva (bordi, tacca). Qui lo sfondo della
+     finestra e le barre di sistema sono nero puro (#000000), così su uno schermo OLED i pixel restano spenti. -->
+<resources>
+    <style name="Base.Theme.RallyGear" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+    </style>
+
+    <style name="Theme.RallyGear" parent="Base.Theme.RallyGear" />
+</resources>

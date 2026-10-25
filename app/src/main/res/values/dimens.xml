@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dimensioni dei testi del layout orizzontale (res/layout-land), tutte in un posto solo.
+     Variante "B": velocità in evidenza, temperature più piccole. -->
+<resources>
+    <!-- Marcia (come nel layout verticale) -->
+    <dimen name="text_size_gear">260sp</dimen>
+    <!-- Temperature ENG T / OIL T -->
+    <dimen name="text_size_temp">32sp</dimen>
+    <!-- Velocità: valore e unità di misura -->
+    <dimen name="text_size_speed">64sp</dimen>
+    <dimen name="text_size_speed_unit">18sp</dimen>
+</resources>

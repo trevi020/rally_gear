@@ -33,37 +33,61 @@ sealed class CdsState {
  *  - URI: content://io.bimmergestalt.cardata.provider/cds/<nomeProprieta>
  *  - il cursore ha una riga con colonne [_id, name, value]; "value" e' una stringa JSON
  *  - AAIdrive chiama notifyChange() sull'URI a ogni aggiornamento (al massimo ogni ~100 ms)
+ *  - ogni query tiene "sottoscritta" la proprieta' presso l'auto; AAIdrive la rilascia dopo
+ *    circa 10 secondi senza query
+ *
+ * Due modalita':
+ *  - pollIntervalMs = 0 (predefinita): TEMPO REALE. Un ContentObserver rilegge il valore a ogni
+ *    notifica di AAIdrive, quindi si aggiorna alla massima frequenza consentita (~10 Hz).
+ *  - pollIntervalMs > 0: POLLING. Nessun observer: il valore viene riletto solo ogni pollIntervalMs
+ *    millisecondi. Adatto ai dati che cambiano piano (temperature): niente query e niente
+ *    aggiornamenti dell'interfaccia a ogni notifica.
  *
  * La prima query puo' bloccarsi fino a circa 1,5 secondi in attesa del dato dall'auto,
  * quindi tutte le letture avvengono su un thread dedicato, mai sul thread principale.
- * Il thread e l'observer esistono solo mentre la LiveData ha osservatori attivi.
+ * Il thread (e l'observer) esistono solo mentre la LiveData ha osservatori attivi.
  */
 class CdsLiveData(
     private val contentResolver: ContentResolver,
-    propertyName: String
+    propertyName: String,
+    private val pollIntervalMs: Long = 0L
 ) : LiveData<CdsState>() {
 
     private val uri: Uri = Uri.parse("content://$AUTHORITY/cds/$propertyName")
     private var worker: HandlerThread? = null
+    private var workerHandler: Handler? = null
     private var observer: ContentObserver? = null
 
     override fun onActive() {
         val thread = HandlerThread("RallyGearCds").also { it.start() }
         val handler = Handler(thread.looper)
-        val contentObserver = object : ContentObserver(handler) {
-            override fun onChange(selfChange: Boolean) {
-                refresh()
-            }
-        }
         worker = thread
-        observer = contentObserver
-        try {
-            contentResolver.registerContentObserver(uri, true, contentObserver)
-        } catch (e: Exception) {
-            // provider non accessibile: la lettura iniziale qui sotto riportera' lo stato corretto
+        workerHandler = handler
+
+        if (pollIntervalMs > 0) {
+            // POLLING: lettura immediata, poi una ogni pollIntervalMs (contati dalla fine della lettura)
+            handler.post(object : Runnable {
+                override fun run() {
+                    refresh()
+                    handler.postDelayed(this, pollIntervalMs)
+                }
+            })
+        } else {
+            // TEMPO REALE: rilettura a ogni notifica di AAIdrive
+            val contentObserver = object : ContentObserver(handler) {
+                override fun onChange(selfChange: Boolean) {
+                    refresh()
+                }
+            }
+            observer = contentObserver
+            try {
+                contentResolver.registerContentObserver(uri, true, contentObserver)
+            } catch (e: Exception) {
+                // provider non accessibile: la lettura iniziale qui sotto riportera' lo stato corretto
+            }
+            // Lettura iniziale (sul thread dedicato)
+            handler.post { refresh() }
         }
-        // Lettura iniziale (sul thread dedicato)
-        handler.post { refresh() }
     }
 
     override fun onInactive() {
@@ -75,6 +99,8 @@ class CdsLiveData(
             }
         }
         observer = null
+        workerHandler?.removeCallbacksAndMessages(null)
+        workerHandler = null
         worker?.quitSafely()
         worker = null
     }
@@ -104,7 +130,13 @@ class CdsLiveData(
         val keys = json.keys()
         while (keys.hasNext()) {
             val key = keys.next()
-            result[key] = json.get(key)
+            val child = json.optJSONObject(key)
+            if (child != null) {
+                // JSON annidato, ad esempio {"temperature":{"engine":19,"oil":18}}: appiattito in {"engine":19,"oil":18}
+                result.putAll(parse(child))
+            } else {
+                result[key] = json.get(key)
+            }
         }
         return result
     }
@@ -113,7 +145,9 @@ class CdsLiveData(
         const val AUTHORITY = "io.bimmergestalt.cardata.provider"
 
         // Nomi delle proprieta' CDS (case-sensitive, vedi la documentazione CDS di BimmerGestalt)
-        const val PROP_GEAR = "driving.gear"        // {"gear": N}
-        const val PROP_RPM = "engine.RPMSpeed"      // {"RPMSpeed": N}
+        const val PROP_SPEED = "driving.speedActual"    // {"speedActual": N}, in km/h
+        const val PROP_TEMP = "engine.temperature"      // {"temperature": {"engine": N, "oil": N}}, in °C
+        const val PROP_GEAR = "driving.gear"            // {"gear": N}
+        const val PROP_RPM = "engine.RPMSpeed"          // {"RPMSpeed": N}
     }
 }

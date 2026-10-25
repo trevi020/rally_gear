@@ -4,17 +4,25 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import kotlin.math.roundToInt
 
 /**
- * Espone marcia, giri motore e una riga di stato leggendo i dati CDS di AAIdrive.
- * Le sorgenti si attivano solo mentre la schermata e' visibile (observer attivi).
+ * Espone marcia, giri motore, velocita', temperature e una riga di stato
+ * leggendo i dati CDS di AAIdrive.
+ * Ogni sorgente si attiva solo se qualcuno la osserva e la schermata e' visibile:
+ * velocita' e temperature vengono osservate solo dal layout orizzontale.
+ *
+ * Marcia, giri e velocita' si aggiornano in tempo reale (alla massima frequenza di AAIdrive);
+ * le temperature vengono lette solo ogni TEMP_POLL_INTERVAL_MS, per non appesantire AAIdrive.
  */
 class MainModel(app: Application) : AndroidViewModel(app) {
 
     private val gearSource = CdsLiveData(app.contentResolver, CdsLiveData.PROP_GEAR)
     private val rpmSource = CdsLiveData(app.contentResolver, CdsLiveData.PROP_RPM)
+    private val speedSource = CdsLiveData(app.contentResolver, CdsLiveData.PROP_SPEED)
+    private val tempSource = CdsLiveData(app.contentResolver, CdsLiveData.PROP_TEMP, TEMP_POLL_INTERVAL_MS)
 
-    /** Testo da mostrare nel display a 7 segmenti: "N", "R", "P", "1", "2", ... oppure "-" */
+    /** Testo da mostrare nel display a 7 segmenti: "N", "R", "P", "0", "1", "2", ... oppure "-" */
     val gear: LiveData<String> = MediatorLiveData<String>().apply {
         addSource(gearSource) { state ->
             value = if (state is CdsState.Value) gearLabel(rawGear(state)) else NO_GEAR
@@ -26,6 +34,23 @@ class MainModel(app: Application) : AndroidViewModel(app) {
         addSource(rpmSource) { state ->
             value = if (state is CdsState.Value) rawRpm(state) ?: 0 else 0
         }
+    }
+
+    /** Velocita' in km/h (unita' indicata dalla documentazione CDS), oppure "--" */
+    val speed: LiveData<String> = MediatorLiveData<String>().apply {
+        addSource(speedSource) { state ->
+            value = if (state is CdsState.Value) numberText(state.values["speedActual"]) else NO_VALUE
+        }
+    }
+
+    /** Riga "ENG T: 92°C" con la temperatura del motore */
+    val engTemp: LiveData<String> = MediatorLiveData<String>().apply {
+        addSource(tempSource) { state -> value = "ENG T: " + temperatureText(state, "engine") }
+    }
+
+    /** Riga "OIL T: 105°C" con la temperatura dell'olio */
+    val oilTemp: LiveData<String> = MediatorLiveData<String>().apply {
+        addSource(tempSource) { state -> value = "OIL T: " + temperatureText(state, "oil") }
     }
 
     /** Riga di stato in basso, utile per capire se la connessione con AAIdrive funziona */
@@ -52,6 +77,14 @@ class MainModel(app: Application) : AndroidViewModel(app) {
 
     private fun rawRpm(state: CdsState.Value): Int? = (state.values["RPMSpeed"] as? Number)?.toInt()
 
+    private fun numberText(value: Any?): String =
+        (value as? Number)?.toDouble()?.roundToInt()?.toString() ?: NO_VALUE
+
+    private fun temperatureText(state: CdsState?, key: String): String {
+        val values = (state as? CdsState.Value)?.values
+        return numberText(values?.get(key)) + "°C"
+    }
+
     private fun describe(gear: CdsState?, rpm: CdsState?): String {
         val states = listOfNotNull(gear, rpm)
         return when {
@@ -70,12 +103,20 @@ class MainModel(app: Application) : AndroidViewModel(app) {
 
     companion object {
         private const val NO_GEAR = "-"
+        private const val NO_VALUE = "--"
 
         /**
-         * Conversione del valore grezzo di driving.gear, secondo la documentazione CDS:
-         *   1 = N, 2 = R, 3 = P, 4 e oltre = D1, D2, D3...
-         * Se sulla tua auto le marce risultano sfasate, correggi solo questa funzione
-         * (il valore grezzo ricevuto e' mostrato in basso a destra).
+         * Ogni quanti millisecondi rileggere le temperature (lente a cambiare).
+         * AAIdrive tiene attiva una proprieta' per circa 10 secondi dopo l'ultima query: con 10 s
+         * la sottoscrizione resta praticamente sempre attiva; se vuoi che AAIdrive la rilasci tra
+         * una lettura e l'altra, alza questo valore (ad esempio 20_000L).
+         */
+        const val TEMP_POLL_INTERVAL_MS = 10_000L
+
+        /**
+         * Conversione del valore grezzo di driving.gear, calibrata sulle prove in auto:
+         *   1 = N, 2 = R, 3 = P, da 4 in su = valore - 4 (4 -> "0", 5 -> "1", 6 -> "2", ...)
+         * Il valore grezzo ricevuto e' mostrato in basso a destra dello schermo.
          */
         fun gearLabel(raw: Int?): String = when {
             raw == null -> NO_GEAR

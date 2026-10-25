@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+: anche la schermata di avvio (splash) di sistema deve essere nera, non grigia -->
+<resources>
+    <style name="Theme.RallyGear" parent="Base.Theme.RallyGear">
+        <item name="android:windowSplashScreenBackground">@android:color/black</item>
+    </style>
+</resources>

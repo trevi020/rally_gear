@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Layout ORIZZONTALE (variante "B"; anche a 270°): 10 LED su tutto il bordo superiore, marcia al centro,
+     temperature (gialle) a sinistra, velocità (verde, con glow) a destra.
+     Gli id led1..led5 e tvGearDigit/tvStatus/tvRaw coincidono con quelli del layout verticale (res/layout). -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:keepScreenOn="true">
+
+    <!-- 10 LED Shift Light, stessa dimensione del verticale, distribuiti su tutta la larghezza.
+         Si accendono a coppie (1-2, 3-4, 5-6, 7-8, 9-10): stesse 5 soglie del layout verticale. -->
+    <LinearLayout
+        android:id="@+id/ledBarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led1" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led2" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led3" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led4" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led5" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led6" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led7" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led8" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led9" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+        <View android:id="@+id/led10" android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/led_off" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- Riga centrale: [temperature] [marcia] [velocità].
+         Le due colonne laterali hanno peso uguale, quindi la marcia resta esattamente al centro. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+        <!-- Sinistra: temperature motore e olio (gialle).
+             Il testo si rimpicciolisce da solo se lo spazio è poco (telefoni piccoli). -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="12dp">
+
+            <TextView
+                android:id="@+id/tvEngTemp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:maxLines="1"
+                android:text="ENG T: --°C"
+                android:textColor="#FFFF00"
+                android:textSize="@dimen/text_size_temp"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="@dimen/text_size_temp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
+
+            <TextView
+                android:id="@+id/tvOilTemp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="monospace"
+                android:maxLines="1"
+                android:text="OIL T: --°C"
+                android:textColor="#FFFF00"
+                android:textSize="@dimen/text_size_temp"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="@dimen/text_size_temp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
+
+        <!-- Centro: marcia a 7 segmenti, identica al layout verticale -->
+        <TextView
+            android:id="@+id/tvGearDigit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="-"
+            android:textColor="#FF0000"
+            android:textSize="@dimen/text_size_gear"
+            android:textStyle="bold"
+            android:shadowColor="#FF0000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="30" />
+
+        <!-- Destra: velocità (verde, con glow come la marcia) in km/h.
+             clipChildren="false": il glow può uscire dal bordo del testo senza essere tagliato. -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clipChildren="false"
+            android:gravity="center_vertical|end"
+            android:orientation="vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="24dp">
+
+            <TextView
+                android:id="@+id/tvSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:maxLines="1"
+                android:text="--"
+                android:textColor="#00FF00"
+                android:textSize="@dimen/text_size_speed"
+                android:shadowColor="#00FF00"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="12"
+                app:autoSizeMaxTextSize="@dimen/text_size_speed"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
+
+            <TextView
+                android:id="@+id/tvSpeedUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="km/h"
+                android:textColor="#00FF00"
+                android:textSize="@dimen/text_size_speed_unit" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Valori grezzi ricevuti dall'auto (debug), nell'angolo in basso a destra -->
+    <TextView
+        android:id="@+id/tvRaw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:text="gear=-  rpm=-"
+        android:textColor="#555555"
+        android:textSize="12sp" />
+
+    <!-- Riga di stato della connessione con AAIdrive (grigio scuro, poco invadente).
+         Occupa lo spazio a sinistra dei valori grezzi, anche su due righe, così non si sovrappone mai. -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/tvRaw"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_horizontal"
+        android:maxLines="2"
+        android:text="In attesa di AAIdrive…"
+        android:textColor="#555555"
+        android:textSize="12sp" />
+
+</RelativeLayout>

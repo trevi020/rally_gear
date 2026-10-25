@@ -19,14 +19,17 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="Rally Gear"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/Theme.RallyGear">
 
-        <!-- Schermata principale a tutto schermo sul telefono
-             (lo schermo resta acceso grazie a FLAG_KEEP_SCREEN_ON e keepScreenOn nel layout) -->
+        <!-- Schermata principale a tutto schermo sul telefono.
+             Verticale al primo avvio. NESSUNA rotazione col sensore: l'orientamento (0°, 90°, 180°, 270°)
+             si cambia solo a mano, con una pressione di 4 secondi sullo schermo (vedi MainActivity,
+             che salva la scelta e la richiede con requestedOrientation).
+             Lo schermo resta acceso (FLAG_KEEP_SCREEN_ON e keepScreenOn nel layout). -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
