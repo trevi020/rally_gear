@@ -62,7 +62,8 @@ class MainActivity : AppCompatActivity() {
         tvRaw = findViewById(R.id.tvRaw)
 
         // Verticale: 5 LED (led1..led5). Orizzontale: 10 LED (led1..led10).
-        leds = LED_IDS.mapNotNull { findViewById<View?>(it) }
+        // (toList() serve perché IntArray non ha mapNotNull: esiste solo per List, Array<T>, ecc.)
+        leds = LED_IDS.toList().mapNotNull { findViewById<View?>(it) }
 
         // Presenti solo nel layout orizzontale, altrimenti null
         val tvSpeed = findViewById<TextView?>(R.id.tvSpeed)
