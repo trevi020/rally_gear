@@ -4,8 +4,8 @@
 <resources>
     <!-- Marcia (come nel layout verticale) -->
     <dimen name="text_size_gear">260sp</dimen>
-    <!-- Temperature ENG T / OIL T -->
-    <dimen name="text_size_temp">32sp</dimen>
+    <!-- Temperature ENG T / OIL T (32sp ridotti del 20%) -->
+    <dimen name="text_size_temp">25.6sp</dimen>
     <!-- Velocità: valore e unità di misura -->
     <dimen name="text_size_speed">64sp</dimen>
     <dimen name="text_size_speed_unit">18sp</dimen>

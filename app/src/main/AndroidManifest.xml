@@ -23,7 +23,7 @@
 
         <!-- Schermata principale a tutto schermo sul telefono.
              Verticale al primo avvio. NESSUNA rotazione col sensore: l'orientamento (0°, 90°, 180°, 270°)
-             si cambia solo a mano, con una pressione di 4 secondi sullo schermo (vedi MainActivity,
+             si cambia solo a mano, con una pressione di 3,4 secondi sullo schermo (vedi MainActivity,
              che salva la scelta e la richiede con requestedOrientation).
              Lo schermo resta acceso (FLAG_KEEP_SCREEN_ON e keepScreenOn nel layout). -->
         <activity

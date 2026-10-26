@@ -1,9 +1,12 @@
 package io.bimmergestalt.idriveconnectaddons.rallygear
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import java.util.Locale
 import kotlin.math.roundToInt
 
 /**
@@ -17,10 +20,21 @@ import kotlin.math.roundToInt
  */
 class MainModel(app: Application) : AndroidViewModel(app) {
 
+    private val prefs = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+
     private val gearSource = CdsLiveData(app.contentResolver, CdsLiveData.PROP_GEAR)
     private val rpmSource = CdsLiveData(app.contentResolver, CdsLiveData.PROP_RPM)
     private val speedSource = CdsLiveData(app.contentResolver, CdsLiveData.PROP_SPEED)
     private val tempSource = CdsLiveData(app.contentResolver, CdsLiveData.PROP_TEMP, TEMP_POLL_INTERVAL_MS)
+
+    /** Misura quante volte al secondo arriva il dato dei giri (mostrato nei valori grezzi) */
+    private val rpmMeter = RateMeter()
+
+    /** Fa ricalcolare gli Hz periodicamente, cosi' scendono a 0 se i dati si fermano */
+    private val ticker = TickerLiveData(RAW_REFRESH_MS)
+
+    /** true = velocita' in mph, false = km/h (scelta salvata) */
+    private val useMph = MutableLiveData<Boolean>(prefs.getBoolean(PREF_MPH, false))
 
     /** Testo da mostrare nel display a 7 segmenti: "N", "R", "P", "0", "1", "2", ... oppure "-" */
     val gear: LiveData<String> = MediatorLiveData<String>().apply {
@@ -36,11 +50,27 @@ class MainModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    /** Velocita' in km/h (unita' indicata dalla documentazione CDS), oppure "--" */
+    /**
+     * Velocita' come testo, in km/h o in mph secondo la scelta dell'utente, oppure "--".
+     * L'auto fornisce sempre km/h (documentazione CDS): per le mph si moltiplica per KMH_TO_MPH.
+     */
     val speed: LiveData<String> = MediatorLiveData<String>().apply {
-        addSource(speedSource) { state ->
-            value = if (state is CdsState.Value) numberText(state.values["speedActual"]) else NO_VALUE
+        val update = {
+            val kmh = ((speedSource.value as? CdsState.Value)?.values?.get("speedActual") as? Number)?.toDouble()
+            value = if (kmh == null) {
+                NO_VALUE
+            } else {
+                val shown = if (useMph.value == true) kmh * KMH_TO_MPH else kmh
+                shown.roundToInt().toString()
+            }
         }
+        addSource(speedSource) { update() }
+        addSource(useMph) { update() }
+    }
+
+    /** Etichetta dell'unita' di misura della velocita': "km/h" o "mph" */
+    val speedUnit: LiveData<String> = MediatorLiveData<String>().apply {
+        addSource(useMph) { mph -> value = if (mph == true) "mph" else "km/h" }
     }
 
     /** Riga "ENG T: 92°C" con la temperatura del motore */
@@ -60,17 +90,32 @@ class MainModel(app: Application) : AndroidViewModel(app) {
         addSource(rpmSource) { update() }
     }
 
-    /** Valori esattamente come arrivano dall'auto, senza interpretazione (debug, in basso a destra) */
+    /**
+     * Valori esattamente come arrivano dall'auto, senza interpretazione, piu' la frequenza di
+     * aggiornamento dei giri in Hz (debug, in basso a destra)
+     */
     val raw: LiveData<String> = MediatorLiveData<String>().apply {
         val update = { value = describeRaw(gearSource.value, rpmSource.value) }
         addSource(gearSource) { update() }
-        addSource(rpmSource) { update() }
+        addSource(rpmSource) {
+            rpmMeter.record()
+            update()
+        }
+        addSource(ticker) { update() }
+    }
+
+    /** Passa da km/h a mph e viceversa; la scelta viene salvata */
+    fun toggleSpeedUnit() {
+        val mph = useMph.value != true
+        useMph.value = mph
+        prefs.edit().putBoolean(PREF_MPH, mph).apply()
     }
 
     private fun describeRaw(gear: CdsState?, rpm: CdsState?): String {
         val g = (gear as? CdsState.Value)?.values?.get("gear")?.toString() ?: "-"
         val r = (rpm as? CdsState.Value)?.values?.get("RPMSpeed")?.toString() ?: "-"
-        return "gear=$g  rpm=$r"
+        val hz = String.format(Locale.US, "%.1f", rpmMeter.hertz())
+        return "gear=$g  rpm=$r  ${hz}Hz"
     }
 
     private fun rawGear(state: CdsState.Value): Int? = (state.values["gear"] as? Number)?.toInt()
@@ -102,8 +147,17 @@ class MainModel(app: Application) : AndroidViewModel(app) {
     }
 
     companion object {
+        private const val PREFS = "rally_gear"
+        private const val PREF_MPH = "speed_mph"
+
         private const val NO_GEAR = "-"
         private const val NO_VALUE = "--"
+
+        /** Fattore di conversione da km/h a mph */
+        private const val KMH_TO_MPH = 0.621371
+
+        /** Ogni quanti millisecondi ricalcolare gli Hz mostrati nei valori grezzi */
+        private const val RAW_REFRESH_MS = 500L
 
         /**
          * Ogni quanti millisecondi rileggere le temperature (lente a cambiare).

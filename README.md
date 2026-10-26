@@ -13,7 +13,9 @@
 * **Sfondo nero puro** (`#000000`) ovunque: layout, finestra, barre di sistema e schermata di avvio. Su uno schermo OLED i pixel restano spenti.
 * **Schermo sempre acceso**, a tutto schermo.
 * **Riga di stato** in basso (grigio scuro): dice se i dati di AAIdrive arrivano.
-* **Valori grezzi di debug** in basso a destra (`gear=… rpm=…`): i numeri esattamente come li invia l'auto.
+* **Valori grezzi di debug** in basso a destra (`gear=… rpm=… N.NHz`): i numeri come li invia l'auto, più la frequenza di aggiornamento dei giri (notifiche al secondo di AAIdrive, finestra mobile di 2 s).
+* **Soglie LED modificabili al volo**: tieni premuta la fascia dei LED per 2 secondi, si apre un popup con − / + (passi di 100 giri). Salvate sul telefono.
+* **km/h ↔ mph**: tieni premuta la velocità per 2 secondi (nessuna finestra). L'auto fornisce solo km/h, la conversione (×0,621371) è fatta dall'app; la scelta è salvata.
 
 ---
 
@@ -21,7 +23,7 @@
 
 L'app **non ruota col sensore**: parte in verticale e l'orientamento si cambia solo a mano.
 
-* **Tieni premuto lo schermo per 4 secondi** (senza muovere il dito): l'orientamento passa al successivo, con una vibrazione e un messaggio.
+* **Tieni premuto lo schermo per 3,4 secondi** (senza muovere il dito) in una zona qualsiasi **tranne la fascia dei LED e la velocità**: l'orientamento passa al successivo, con una vibrazione e un messaggio.
 * Ordine: **0° → 90° → 180° → 270° → 0°** ... Servono fino a 3 pressioni per tornare a un orientamento precedente.
 * La scelta viene **salvata** e ripristinata alla riapertura dell'app.
 * Verticale (0° e 180°) usa il layout verticale; 90° e 270° usano quello orizzontale.
@@ -83,7 +85,9 @@ Le soglie sono 5, uguali in verticale e in orizzontale (`MainActivity.kt`, `THRE
 
 * `CdsLiveData.kt`: legge una proprietà CDS dal content provider di AAIdrive (su thread dedicato, in tempo reale o a polling) e la espone come `LiveData`.
 * `MainModel.kt`: ViewModel con marcia, RPM, velocità, temperature e testi di stato.
-* `MainActivity.kt`: interfaccia a tutto schermo, font custom, LED, rotazione manuale con pressione di 4 secondi.
+* `MainActivity.kt`: interfaccia a tutto schermo, font custom, LED, rotazione manuale (3,4 s), popup soglie (2 s sui LED), cambio km/h↔mph (2 s sulla velocità).
+* `ShiftLightSettings.kt` e `ThresholdsDialog.kt`: soglie dei LED salvate e popup per modificarle.
+* `RateMeter.kt`: misura degli Hz dei giri motore.
 * `RallyGearService.kt`: servizio vuoto, serve solo alla scoperta da parte di AAIdrive.
 * `res/layout/activity_main.xml` (verticale) e `res/layout-land/activity_main.xml` (orizzontale).
 * `res/values/dimens.xml`: dimensioni dei testi del layout orizzontale (marcia, temperature, velocità).
@@ -107,7 +111,7 @@ Il workflow usa JDK 17 e Gradle 8.5 e lancia `gradle assembleDebug` dalla radice
 1. Installa **prima AAIdrive**, poi Rally Gear (così il permesso CDS viene concesso all'installazione; se hai fatto il contrario, reinstalla Rally Gear).
 2. Apri AAIdrive e controlla che Rally Gear compaia nella scheda **Addons**.
 3. Collega il telefono all'auto e verifica in AAIdrive che la connessione sia attiva.
-4. Apri **Rally Gear**, metti il telefono sul supporto e, se serve, ruotalo con la pressione di 4 secondi.
+4. Apri **Rally Gear**, metti il telefono sul supporto e, se serve, ruotalo con la pressione di 3,4 secondi.
 
 **Se non arriva nulla**, la riga di stato dice cosa manca: AAIdrive non raggiungibile (non installato o troppo vecchio), permesso negato (reinstalla Rally Gear) oppure attesa dei dati dall'auto (auto non ancora collegata).
 
