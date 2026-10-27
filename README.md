@@ -19,9 +19,9 @@
 
 ## Overview
 
-**Rally Gear** is an addon for [AAIdrive](https://github.com/BimmerGestalt/AAIdrive) that turns your smartphone into a sporty black-background dashboard, designed with OLED screens in mind:
+**Rally Gear** is an addon for [AAIdrive](https://github.com/BimmerGestalt/AAIdrive) that turns your smartphone into a gearbox indicator like the ones seen in rally cars. The original idea was to use only portrait mode as the gear indicator is a single digit display, however since we have the ability to rotate the smartphone screen, I have added a landscape mode with additional useful info on the sides.
 
-- **Engaged gear** in a 7-segment font (DSEG7) with a red glow;
+- **Engaged gear** in a 7-segment font with a red glow;
 - **Shift lights**: green → yellow → red LEDs driven by engine RPM;
 - **Speed** (km/h or mph) with a green glow;
 - **Engine and oil temperature**.
@@ -64,7 +64,7 @@ The interface is controlled with **long presses** (without moving your finger), 
 |---|---|---|
 | **LED band** (top of the screen) | 2 seconds | Opens the LED thresholds popup |
 | **Speed** (landscape layout) | 2 seconds | Toggles between km/h and mph |
-| **Anywhere else** | 3.4 seconds | Rotates the screen by 90° |
+| **Anywhere else** | 3 seconds | Rotates the screen by 90° |
 
 ### Rotation
 
