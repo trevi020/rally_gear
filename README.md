@@ -15,6 +15,13 @@
 
 </div>
 
+<p align="center">
+  <img src="docs/screenshots/portrait1.png" width="260" alt="Portrait layout">
+  &nbsp;&nbsp;
+    <img src="docs/screenshots/portrait2.png" width="260" alt="Portrait layout">
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/horizontal1" width="520" alt="Landscape layout">
+</p>
 ---
 
 ## Overview
