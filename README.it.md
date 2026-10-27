@@ -19,7 +19,7 @@
 
 ## Panoramica
 
-**Rally Gear** è un addon per [AAIdrive](https://github.com/BimmerGestalt/AAIdrive) che trasforma lo smartphone in un cruscotto sportivo a schermo nero, pensato per i telefoni OLED:
+**Rally Gear** è un addon per [AAIdrive](https://github.com/BimmerGestalt/AAIdrive) che trasforma lo smartphone in un indicatore di marcia come quelli delle auto da rally. L’idea originale era usare solo la modalità verticale, dato che l’indicatore di marcia è un display a una sola cifra. Visto però che è possibile ruotare lo schermo dello smartphone, ho aggiunto una modalità orizzontale con informazioni utili aggiuntive ai lati.
 
 - **Marcia inserita** con font a 7 segmenti (DSEG7) e glow rosso;
 - **Shift light** a LED verde → giallo → rosso in base ai giri motore;
