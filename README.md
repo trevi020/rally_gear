@@ -27,7 +27,7 @@
 Il telefono si collega all'auto **via cavo USB** tramite AAIdrive, che espone i dati CDS (Car Data Service) letti direttamente dalla centralina dell'auto. Rispetto a un dongle OBD-II Bluetooth/Wi-Fi:
 
 - **nessun dongle** da acquistare, accoppiare o alimentare;
-- **latenza molto bassa** e **alta frequenza di aggiornamento** (fino a circa 10 Hz per giri, marcia e velocità);
+- **bassa latenza** e **alta frequenza di aggiornamento**: i dati arrivano in tempo reale, a ogni variazione notificata da AAIdrive (la frequenza effettiva dei giri è mostrata nei dati grezzi, vedi sotto);
 - connessione stabile, e il telefono si ricarica mentre è in uso.
 
 ## Caratteristiche
@@ -92,14 +92,14 @@ AAIdrive espone le proprietà CDS come Content Provider Android (`content://io.b
 
 | Proprietà | Valore | Uso | Aggiornamento |
 |---|---|---|---|
-| `driving.gear` | `{"gear": N}` | marcia | tempo reale (~10 Hz) |
-| `engine.RPMSpeed` | `{"RPMSpeed": N}` | giri motore → LED | tempo reale (~10 Hz) |
-| `driving.speedActual` | `{"speedActual": N}` (km/h) | velocità | tempo reale (~10 Hz) |
+| `driving.gear` | `{"gear": N}` | marcia | tempo reale |
+| `engine.RPMSpeed` | `{"RPMSpeed": N}` | giri motore → LED | tempo reale |
+| `driving.speedActual` | `{"speedActual": N}` (km/h) | velocità | tempo reale |
 | `engine.temperature` | `{"temperature": {"engine": N, "oil": N}}` (°C) | ENG T / OIL T | ogni 10 secondi |
 
 Le temperature cambiano lentamente e vengono rilette ogni 10 secondi, lasciando tutta la banda ai dati veloci. La marcia mostrata è `valore − 4` da 4 in su (`4 → 0`, `5 → 1`, …), mentre `1 = N`, `2 = R`, `3 = P`.
 
-Il valore in **Hz** nei dati grezzi indica quante notifiche al secondo AAIdrive invia per i giri motore (media su 2 secondi).
+Il valore in **Hz** nei dati grezzi indica quante volte al secondo il valore dei giri motore **cambia** (media mobile su 2 secondi): le riletture dello stesso valore non vengono contate.
 
 Riferimenti: [documentazione CDS](https://bimmergestalt.github.io/BMWConnectedAnalysis/cds/) · [IDriveConnectAddons](https://github.com/hufman/IDriveConnectAddons).
 

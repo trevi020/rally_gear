@@ -38,7 +38,7 @@ sealed class CdsState {
  *
  * Due modalita':
  *  - pollIntervalMs = 0 (predefinita): TEMPO REALE. Un ContentObserver rilegge il valore a ogni
- *    notifica di AAIdrive, quindi si aggiorna alla massima frequenza consentita (~10 Hz).
+ *    notifica di AAIdrive, quindi si aggiorna alla massima frequenza consentita.
  *  - pollIntervalMs > 0: POLLING. Nessun observer: il valore viene riletto solo ogni pollIntervalMs
  *    millisecondi. Adatto ai dati che cambiano piano (temperature): niente query e niente
  *    aggiornamenti dell'interfaccia a ogni notifica.

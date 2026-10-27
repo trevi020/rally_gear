@@ -30,6 +30,9 @@ class MainModel(app: Application) : AndroidViewModel(app) {
     /** Misura quante volte al secondo arriva il dato dei giri (mostrato nei valori grezzi) */
     private val rpmMeter = RateMeter()
 
+    /** Ultimo valore dei giri contato dal misuratore (per ignorare le letture uguali) */
+    private var lastRpmValue: Int? = null
+
     /** Fa ricalcolare gli Hz periodicamente, cosi' scendono a 0 se i dati si fermano */
     private val ticker = TickerLiveData(RAW_REFRESH_MS)
 
@@ -92,13 +95,19 @@ class MainModel(app: Application) : AndroidViewModel(app) {
 
     /**
      * Valori esattamente come arrivano dall'auto, senza interpretazione, piu' la frequenza di
-     * aggiornamento dei giri in Hz (debug, in basso a destra)
+     * aggiornamento dei giri in Hz, cioe' quante volte al secondo il valore cambia (debug, in basso a destra)
      */
     val raw: LiveData<String> = MediatorLiveData<String>().apply {
         val update = { value = describeRaw(gearSource.value, rpmSource.value) }
         addSource(gearSource) { update() }
-        addSource(rpmSource) {
-            rpmMeter.record()
+        addSource(rpmSource) { state ->
+            // Si contano solo i giri CAMBIATI rispetto alla lettura precedente: le notifiche di
+            // AAIdrive o le riletture dello stesso valore non sono aggiornamenti dell'auto.
+            val current = (state as? CdsState.Value)?.let { rawRpm(it) }
+            if (current != null && current != lastRpmValue) {
+                lastRpmValue = current
+                rpmMeter.record()
+            }
             update()
         }
         addSource(ticker) { update() }
