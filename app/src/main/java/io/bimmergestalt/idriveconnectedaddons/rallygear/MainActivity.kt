@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity() {
             .putInt(PREF_ROTATION, rotationIndex)
             .apply()
         window.decorView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-        Toast.makeText(this, "Rotazione schermo: ${rotationIndex * 90}°", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.toast_rotation, rotationIndex * 90), Toast.LENGTH_SHORT).show()
         requestedOrientation = ORIENTATIONS[rotationIndex]
     }
 

@@ -2,124 +2,131 @@
 
 # Rally Gear
 
-**Display da rally per MINI e BMW: marcia, shift light, velocità e temperature sul tuo smartphone Android.**
+**A rally-style dashboard for MINI and BMW: gear, shift lights, speed and temperatures on your Android phone.**
 
 ![Platform](https://img.shields.io/badge/platform-Android%207.0%2B-3DDC84?logo=android&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.9-7F52FF?logo=kotlin&logoColor=white)
 ![AAIdrive](https://img.shields.io/badge/addon%20for-AAIdrive-0066B1)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+<br>
+
+🇬🇧 English · [🇮🇹 Italiano](README.it.md)
+
 </div>
 
 ---
 
-## Panoramica
+## Overview
 
-**Rally Gear** è un addon per [AAIdrive](https://github.com/BimmerGestalt/AAIdrive) che trasforma lo smartphone in un cruscotto sportivo a schermo nero, pensato per i telefoni OLED:
+**Rally Gear** is an addon for [AAIdrive](https://github.com/BimmerGestalt/AAIdrive) that turns your smartphone into a sporty black-background dashboard, designed with OLED screens in mind:
 
-- **Marcia inserita** con font a 7 segmenti (DSEG7) e glow rosso;
-- **Shift light** a LED verde → giallo → rosso in base ai giri motore;
-- **Velocità** (km/h o mph) con glow verde;
-- **Temperatura motore e olio**.
+- **Engaged gear** in a 7-segment font (DSEG7) with a red glow;
+- **Shift lights**: green → yellow → red LEDs driven by engine RPM;
+- **Speed** (km/h or mph) with a green glow;
+- **Engine and oil temperature**.
 
-### Dati CAN bus via USB, senza dongle OBD
+### CAN bus data over USB, no OBD dongle
 
-Il telefono si collega all'auto **via cavo USB** tramite AAIdrive, che espone i dati CDS (Car Data Service) letti direttamente dalla centralina dell'auto. Rispetto a un dongle OBD-II Bluetooth/Wi-Fi:
+The phone connects to the car **through a USB cable** via AAIdrive, which exposes the CDS (Car Data Service) values read directly from the car. Compared with a Bluetooth/Wi-Fi OBD-II dongle:
 
-- **nessun dongle** da acquistare, accoppiare o alimentare;
-- **bassa latenza** e **alta frequenza di aggiornamento**: i dati arrivano in tempo reale, a ogni variazione notificata da AAIdrive (la frequenza effettiva dei giri è mostrata nei dati grezzi, vedi sotto);
-- connessione stabile, e il telefono si ricarica mentre è in uso.
+- **no dongle** to buy, pair or power;
+- **low latency** and **high update rate**: data arrives in real time, on every change notified by AAIdrive (the actual RPM update rate is shown in the debug values, see below);
+- a stable connection, and the phone keeps charging while in use.
 
-## Caratteristiche
+## Features
 
 | | |
 |---|---|
-| **Marcia** | `N`, `R`, `P`, `0`, `1`, `2`, … in 7 segmenti, `-` se il dato manca |
-| **Shift light** | 5 LED in verticale, 10 in orizzontale (accesi a coppie), soglie personalizzabili |
-| **Velocità** | km/h o mph, a scelta |
-| **Temperature** | `ENG T` (motore) e `OIL T` (olio), in °C |
-| **Orientamento** | 4 rotazioni (0°, 90°, 180°, 270°) scelte a mano, per adattarsi a qualsiasi supporto |
-| **Schermo** | nero puro `#000000`, sempre acceso, a tutto schermo |
-| **Debug** | valori grezzi e frequenza di aggiornamento dei giri in basso a destra |
+| **Gear** | `N`, `R`, `P`, `0`, `1`, `2`, … in 7 segments, `-` when no data |
+| **Shift lights** | 5 LEDs in portrait, 10 in landscape (lit in pairs), customizable thresholds |
+| **Speed** | km/h or mph, your choice |
+| **Temperatures** | `ENG T` (engine) and `OIL T` (oil), in °C |
+| **Orientation** | 4 rotations (0°, 90°, 180°, 270°) set manually, to fit any phone mount |
+| **Screen** | pure black `#000000`, always on, fullscreen |
+| **Debug** | raw values and RPM update rate at the bottom right |
+| **Languages** | English and Italian (follows the phone language) |
 
-## Installazione
+## Installation
 
-1. Installa **AAIdrive** (versione recente, con content provider CDS) e collega il telefono all'auto.
-2. Installa l'APK di Rally Gear dalla sezione [Releases](../../releases) o dagli artefatti del repository. Installa **prima AAIdrive**, così il permesso CDS viene concesso automaticamente (altrimenti reinstalla Rally Gear).
-3. Apri AAIdrive e verifica che *Rally Gear* compaia nella scheda **Addons**.
-4. Apri Rally Gear e metti il telefono sul supporto.
+1. Install **AAIdrive** (a recent version with the CDS content provider) and connect the phone to the car.
+2. Install the Rally Gear APK from the [Releases](../../releases) section or from the repository artifacts. Install **AAIdrive first** so the CDS permission is granted automatically (otherwise reinstall Rally Gear).
+3. Open AAIdrive and check that *Rally Gear* appears in the **Addons** tab.
+4. Open Rally Gear and place the phone in its mount.
 
-La riga di stato in basso indica se i dati arrivano: AAIdrive non raggiungibile, permesso negato oppure attesa dei dati dall'auto.
+The status line at the bottom tells you whether data is arriving: AAIdrive unreachable, permission denied, or waiting for car data.
 
-## Utilizzo
+## Usage
 
-L'interfaccia si controlla con **pressioni prolungate** (senza muovere il dito), così non ci sono tocchi accidentali durante la guida. L'azione dipende dalla zona premuta:
+The interface is controlled with **long presses** (without moving your finger), so there are no accidental touches while driving. The action depends on the zone you press:
 
-| Zona | Pressione | Azione |
+| Zone | Press | Action |
 |---|---|---|
-| **Fascia dei LED** (parte alta) | 2 secondi | Apre il popup per modificare le soglie dei LED |
-| **Velocità** (layout orizzontale) | 2 secondi | Passa da km/h a mph e viceversa |
-| **Qualsiasi altro punto** | 3,4 secondi | Ruota lo schermo di 90° |
+| **LED band** (top of the screen) | 2 seconds | Opens the LED thresholds popup |
+| **Speed** (landscape layout) | 2 seconds | Toggles between km/h and mph |
+| **Anywhere else** | 3.4 seconds | Rotates the screen by 90° |
 
-### Rotazione
+### Rotation
 
-L'app **non ruota col sensore**: parte in verticale e cambia orientamento solo a mano, in sequenza **0° → 90° → 180° → 270° → 0°**, con vibrazione e messaggio di conferma. La scelta viene ricordata alla riapertura. Verticale (0°, 180°) e orizzontale (90°, 270°) usano due layout dedicati:
+The app **does not follow the sensor**: it starts in portrait and changes orientation only manually, in sequence **0° → 90° → 180° → 270° → 0°**, with a vibration and a confirmation message. Your choice is remembered when the app is reopened. Portrait (0°, 180°) and landscape (90°, 270°) use two dedicated layouts:
 
-- **Verticale:** 5 LED in alto, marcia al centro.
-- **Orizzontale:** 10 LED su tutto il bordo superiore, marcia al centro, velocità a destra, temperature a sinistra.
+- **Portrait:** 5 LEDs at the top, gear in the center.
+- **Landscape:** 10 LEDs across the top edge, gear in the center, speed on the right, temperatures on the left.
 
-### Unità di velocità
+### Speed unit
 
-L'auto fornisce la velocità solo in km/h; l'app converte in mph (× 0,621371). La scelta viene salvata.
+The car only provides speed in km/h; the app converts to mph (× 0.621371). Your choice is saved.
 
-### Shift light personalizzabili
+### Customizable shift lights
 
-Le soglie sono 5, uguali in verticale e in orizzontale (qui i 10 LED si accendono a coppie). Valori predefiniti:
+There are 5 thresholds, the same in portrait and landscape (where the 10 LEDs light up in pairs). Defaults:
 
-| Soglia | LED verticale | LED orizzontale | Colore |
+| Threshold | Portrait LED | Landscape LEDs | Color |
 |---|---|---|---|
-| ≥ 3500 giri/min | 1 | 1 e 2 | verde |
-| ≥ 4200 giri/min | 2 | 3 e 4 | verde |
-| ≥ 5000 giri/min | 3 | 5 e 6 | giallo |
-| ≥ 5700 giri/min | 4 | 7 e 8 | giallo |
-| ≥ 6500 giri/min | 5 | 9 e 10 | rosso |
+| ≥ 3500 RPM | 1 | 1 and 2 | green |
+| ≥ 4200 RPM | 2 | 3 and 4 | green |
+| ≥ 5000 RPM | 3 | 5 and 6 | yellow |
+| ≥ 5700 RPM | 4 | 7 and 8 | yellow |
+| ≥ 6500 RPM | 5 | 9 and 10 | red |
 
-Tenendo premuta la fascia dei LED per 2 secondi si apre il popup di modifica: i pulsanti **−** e **+** cambiano la soglia a passi di 100 giri/min (tenendoli premuti si ripete), le modifiche sono **subito attive e salvate**, e **Ripristina** riporta i valori predefiniti. Le soglie restano sempre crescenti.
+Hold the LED band for 2 seconds to open the editing popup: the **−** and **+** buttons change the threshold in steps of 100 RPM (hold to repeat), changes are **applied and saved immediately**, and **Reset** restores the defaults. Thresholds always stay in ascending order.
 
-## Dati CDS utilizzati
+## CDS data used
 
-AAIdrive espone le proprietà CDS come Content Provider Android (`content://io.bimmergestalt.cardata.provider/cds/<proprietà>`).
+AAIdrive exposes CDS properties as an Android Content Provider (`content://io.bimmergestalt.cardata.provider/cds/<property>`).
 
-| Proprietà | Valore | Uso | Aggiornamento |
+| Property | Value | Use | Update |
 |---|---|---|---|
-| `driving.gear` | `{"gear": N}` | marcia | tempo reale |
-| `engine.RPMSpeed` | `{"RPMSpeed": N}` | giri motore → LED | tempo reale |
-| `driving.speedActual` | `{"speedActual": N}` (km/h) | velocità | tempo reale |
-| `engine.temperature` | `{"temperature": {"engine": N, "oil": N}}` (°C) | ENG T / OIL T | ogni 10 secondi |
+| `driving.gear` | `{"gear": N}` | gear | real time |
+| `engine.RPMSpeed` | `{"RPMSpeed": N}` | engine RPM → LEDs | real time |
+| `driving.speedActual` | `{"speedActual": N}` (km/h) | speed | real time |
+| `engine.temperature` | `{"temperature": {"engine": N, "oil": N}}` (°C) | ENG T / OIL T | every 10 seconds |
 
-Le temperature cambiano lentamente e vengono rilette ogni 10 secondi, lasciando tutta la banda ai dati veloci. La marcia mostrata è `valore − 4` da 4 in su (`4 → 0`, `5 → 1`, …), mentre `1 = N`, `2 = R`, `3 = P`.
+Temperatures change slowly and are re-read every 10 seconds, leaving all the bandwidth to the fast data. The displayed gear is `value − 4` from 4 upwards (`4 → 0`, `5 → 1`, …), while `1 = N`, `2 = R`, `3 = P`.
 
-Il valore in **Hz** nei dati grezzi indica quante volte al secondo il valore dei giri motore **cambia** (media mobile su 2 secondi): le riletture dello stesso valore non vengono contate.
+The **Hz** value in the debug data shows how many times per second the engine RPM value **changes** (moving average over 2 seconds): re-reads of the same value are not counted.
 
-Riferimenti: [documentazione CDS](https://bimmergestalt.github.io/BMWConnectedAnalysis/cds/) · [IDriveConnectAddons](https://github.com/hufman/IDriveConnectAddons).
+References: [CDS documentation](https://bimmergestalt.github.io/BMWConnectedAnalysis/cds/) · [IDriveConnectAddons](https://github.com/hufman/IDriveConnectAddons).
 
-## Struttura del progetto
+## Project structure
 
 ```
 app/src/main/
 ├── java/…/rallygear/
-│   ├── MainActivity.kt          interfaccia, LED, gesti a pressione prolungata
-│   ├── MainModel.kt             ViewModel: marcia, giri, velocità, temperature, stato
-│   ├── CdsLiveData.kt           lettura dei dati CDS (tempo reale o polling)
-│   ├── ShiftLightSettings.kt    soglie dei LED salvate
-│   ├── ThresholdsDialog.kt      popup di modifica delle soglie
-│   ├── RateMeter.kt             misura degli Hz
-│   └── RallyGearService.kt      scoperta dell'addon da parte di AAIdrive
+│   ├── MainActivity.kt          UI, LEDs, long-press gestures
+│   ├── MainModel.kt             ViewModel: gear, RPM, speed, temperatures, status
+│   ├── CdsLiveData.kt           CDS data reading (real time or polling)
+│   ├── ShiftLightSettings.kt    saved LED thresholds
+│   ├── ThresholdsDialog.kt      threshold editing popup
+│   ├── RateMeter.kt             Hz measurement
+│   └── RallyGearService.kt      lets AAIdrive discover the addon
 └── res/
-    ├── layout/ , layout-land/   layout verticale e orizzontale
-    └── values/dimens.xml        dimensioni dei testi
+    ├── layout/ , layout-land/   portrait and landscape layouts
+    ├── values/strings.xml       English texts (default)
+    ├── values-it/strings.xml    Italian texts
+    └── values/dimens.xml        text sizes
 ```
 
-## Licenza
+## License
 
-Distribuito con licenza [MIT](LICENSE). Il protocollo del content provider CDS è quello documentato e implementato da [BimmerGestalt](https://github.com/BimmerGestalt) (anch'esso MIT).
+Distributed under the [MIT](LICENSE) license. The CDS content provider protocol is the one documented and implemented by [BimmerGestalt](https://github.com/BimmerGestalt) (also MIT).

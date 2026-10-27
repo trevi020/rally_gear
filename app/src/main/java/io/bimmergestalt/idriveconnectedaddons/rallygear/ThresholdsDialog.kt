@@ -36,7 +36,13 @@ class ThresholdsDialog(
     private val density = activity.resources.displayMetrics.density
     private var dialog: Dialog? = null
 
-    private val labels = arrayOf("Verde 1", "Verde 2", "Giallo 1", "Giallo 2", "Rosso")
+    private val labels = arrayOf(
+        activity.getString(R.string.label_green_1),
+        activity.getString(R.string.label_green_2),
+        activity.getString(R.string.label_yellow_1),
+        activity.getString(R.string.label_yellow_2),
+        activity.getString(R.string.label_red)
+    )
     private val labelColors = intArrayOf(Color.GREEN, Color.GREEN, Color.YELLOW, Color.YELLOW, Color.RED)
 
     private fun dp(value: Int): Int = (value * density + 0.5f).toInt()
@@ -84,10 +90,10 @@ class ThresholdsDialog(
             orientation = LinearLayout.VERTICAL
             setPadding(dp(20), dp(16), dp(20), dp(16))
         }
-        column.addView(label("Soglie shift light", 20f, Color.WHITE, true))
+        column.addView(label(activity.getString(R.string.dialog_title), 20f, Color.WHITE, true))
         column.addView(
             label(
-                "Giri/min a cui si accendono i LED. Tieni premuto − o + per cambiare più in fretta. Le modifiche sono subito attive.",
+                activity.getString(R.string.dialog_hint),
                 12f, 0xFFAAAAAA.toInt(), false
             ),
             LinearLayout.LayoutParams(
@@ -122,8 +128,8 @@ class ThresholdsDialog(
         }
 
         val actions = LinearLayout(activity).apply { orientation = LinearLayout.HORIZONTAL }
-        val reset = makeButton("RIPRISTINA", 14f).apply { setOnClickListener { resetDefaults() } }
-        val close = makeButton("CHIUDI", 14f).apply { setOnClickListener { dismiss() } }
+        val reset = makeButton(activity.getString(R.string.button_reset), 14f).apply { setOnClickListener { resetDefaults() } }
+        val close = makeButton(activity.getString(R.string.button_close), 14f).apply { setOnClickListener { dismiss() } }
         actions.addView(reset, LinearLayout.LayoutParams(0, dp(48), 1f).apply { rightMargin = dp(8) })
         actions.addView(close, LinearLayout.LayoutParams(0, dp(48), 1f).apply { leftMargin = dp(8) })
         column.addView(

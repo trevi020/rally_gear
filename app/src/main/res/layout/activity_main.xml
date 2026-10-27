@@ -73,7 +73,7 @@
         android:layout_marginBottom="8dp"
         android:gravity="center_horizontal"
         android:maxLines="2"
-        android:text="In attesa di AAIdrive…"
+        android:text="@string/status_waiting_aaidrive"
         android:textColor="#555555"
         android:textSize="12sp" />
 

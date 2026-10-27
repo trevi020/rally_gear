@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Default language: English. Italian translation in res/values-it/strings.xml -->
+<resources>
+    <string name="status_waiting_aaidrive">Waiting for AAIdrive…</string>
+    <string name="status_permission_denied">CDS permission denied: reinstall Rally Gear after installing AAIdrive</string>
+    <string name="status_unreachable">AAIdrive unreachable (installed? recent version? car connected?)</string>
+    <string name="status_ok">CDS ok: data received from AAIdrive</string>
+    <string name="status_waiting_car">Waiting for car data…</string>
+    <string name="toast_rotation">Screen rotation: %1$d°</string>
+    <string name="dialog_title">Shift light thresholds</string>
+    <string name="dialog_hint">RPM at which the LEDs turn on. Hold − or + to change faster. Changes apply immediately.</string>
+    <string name="label_green_1">Green 1</string>
+    <string name="label_green_2">Green 2</string>
+    <string name="label_yellow_1">Yellow 1</string>
+    <string name="label_yellow_2">Yellow 2</string>
+    <string name="label_red">Red</string>
+    <string name="button_reset">RESET</string>
+    <string name="button_close">CLOSE</string>
+</resources>

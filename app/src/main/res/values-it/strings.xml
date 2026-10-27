@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="status_waiting_aaidrive">In attesa di AAIdrive…</string>
+    <string name="status_permission_denied">Permesso CDS negato: reinstalla Rally Gear dopo aver installato AAIdrive</string>
+    <string name="status_unreachable">AAIdrive non raggiungibile (installato? versione recente? auto collegata?)</string>
+    <string name="status_ok">CDS ok: dati ricevuti da AAIdrive</string>
+    <string name="status_waiting_car">In attesa dei dati dall\'auto…</string>
+    <string name="toast_rotation">Rotazione schermo: %1$d°</string>
+    <string name="dialog_title">Soglie shift light</string>
+    <string name="dialog_hint">Giri/min a cui si accendono i LED. Tieni premuto − o + per cambiare più in fretta. Le modifiche sono subito attive.</string>
+    <string name="label_green_1">Verde 1</string>
+    <string name="label_green_2">Verde 2</string>
+    <string name="label_yellow_1">Giallo 1</string>
+    <string name="label_yellow_2">Giallo 2</string>
+    <string name="label_red">Rosso</string>
+    <string name="button_reset">RIPRISTINA</string>
+    <string name="button_close">CHIUDI</string>
+</resources>

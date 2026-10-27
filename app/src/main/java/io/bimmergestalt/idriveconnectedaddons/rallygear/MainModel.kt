@@ -139,19 +139,21 @@ class MainModel(app: Application) : AndroidViewModel(app) {
         return numberText(values?.get(key)) + "°C"
     }
 
+    private fun string(id: Int): String = getApplication<Application>().getString(id)
+
     private fun describe(gear: CdsState?, rpm: CdsState?): String {
         val states = listOfNotNull(gear, rpm)
         return when {
             states.isEmpty() ->
-                "In attesa di AAIdrive…"
+                string(R.string.status_waiting_aaidrive)
             states.any { it is CdsState.PermissionDenied } ->
-                "Permesso CDS negato: reinstalla Rally Gear dopo aver installato AAIdrive"
+                string(R.string.status_permission_denied)
             states.all { it is CdsState.Unavailable } ->
-                "AAIdrive non raggiungibile (installato? versione recente? auto collegata?)"
+                string(R.string.status_unreachable)
             states.any { it is CdsState.Value } ->
-                "CDS ok: dati ricevuti da AAIdrive"
+                string(R.string.status_ok)
             else ->
-                "In attesa dei dati dall'auto…"
+                string(R.string.status_waiting_car)
         }
     }
 
