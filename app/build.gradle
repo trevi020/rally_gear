@@ -13,12 +13,31 @@ android {
         applicationId "io.bimmergestalt.idriveconnectaddons.rallygear"
         minSdk 24
         targetSdk 34
-        versionCode 3
-        versionName "1.2"
+        // Su GitHub Actions il numero di build (GITHUB_RUN_NUMBER) cresce a ogni esecuzione:
+        // ogni APK ha un versionCode piu' alto e Android lo installa sopra il precedente.
+        // In locale (senza la variabile) si usa 1.
+        def buildNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
+        versionCode buildNumber
+        versionName "1.2.${buildNumber}"
+    }
+
+    // Firma: se il workflow fornisce il keystore (da GitHub Secrets) lo usa, cosi' tutte le build
+    // hanno la STESSA firma e si aggiornano a vicenda. Senza keystore ripiega sulla firma debug.
+    def keystorePath = System.getenv("KEYSTORE_PATH")
+    signingConfigs {
+        if (keystorePath) {
+            release {
+                storeFile file(keystorePath)
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
+            signingConfig keystorePath ? signingConfigs.release : signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
