@@ -18,7 +18,7 @@ android {
         // In locale (senza la variabile) si usa 1.
         def buildNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
         versionCode buildNumber
-        versionName "1.2.${buildNumber}"
+        versionName "0.6.${buildNumber}"
     }
 
     // Firma: se il workflow fornisce il keystore (da GitHub Secrets) lo usa, cosi' tutte le build
