@@ -16,11 +16,11 @@
 </div>
 
 <p align="center">
-  <img src="docs/screenshots/portrait1.jpg" width="260" alt="Portrait layout">
+  <img src="docs/screenshots/portrait1.jpg" width="130" alt="Portrait layout">
   &nbsp;&nbsp;
-    <img src="docs/screenshots/portrait2.jpg" width="260" alt="Portrait layout">
+    <img src="docs/screenshots/portrait2.jpg" width="130" alt="Portrait layout">
   &nbsp;&nbsp;
-  <img src="docs/screenshots/horizontal1.jpg" width="520" alt="Landscape layout">
+  <img src="docs/screenshots/horizontal1.jpg" width="260" alt="Landscape layout">
 </p>
 ---
 
