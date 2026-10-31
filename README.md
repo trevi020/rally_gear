@@ -32,7 +32,7 @@
     <img src="docs/screenshots/portrait2.jpg" width="160" alt="Portrait layout">
   </div>
   <div>
-    <img src="docs/screenshots/horizontal1.jpg" width="360" alt="Landscape layout">
+    <img src="docs/screenshots/horizontal1.jpg" width="350" alt="Landscape layout">
   </div>
 </div>
 
