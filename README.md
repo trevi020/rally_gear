@@ -2,7 +2,7 @@
 
 # Rally Gear
 
-**A rally-style dashboard for MINI and BMW: gear, shift lights, speed and temperatures on your Android phone.**
+**A rally-style gear digit display for MINI and BMW for your Android device with low latency and without the need of any OBD Dongle device.**
 
 ![Platform](https://img.shields.io/badge/platform-Android%207.0%2B-3DDC84?logo=android&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.9-7F52FF?logo=kotlin&logoColor=white)
