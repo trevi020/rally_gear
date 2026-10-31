@@ -27,11 +27,11 @@
 - **Engine and oil temperature**.
 
 <p align="center">
-  <img src="docs/screenshots/portrait1.jpg" width="130" alt="Portrait layout">
+  <img src="docs/screenshots/portrait1.jpg" width="130" alt="Portrait layout" style="vertical-align: middle;">
   &nbsp;&nbsp;
-    <img src="docs/screenshots/portrait2.jpg" width="130" alt="Portrait layout">
+  <img src="docs/screenshots/portrait2.jpg" width="130" alt="Portrait layout" style="vertical-align: middle;">
   &nbsp;&nbsp;
-  <img src="docs/screenshots/horizontal1.jpg" width="260" style="vertical-align: middle; alt="Landscape layout">
+  <img src="docs/screenshots/horizontal1.jpg" width="260" alt="Landscape layout" style="vertical-align: middle;">
 </p>
 
 ### CAN bus data over USB, no OBD dongle
