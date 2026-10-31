@@ -28,7 +28,7 @@
 
 <div align="center" style="display: flex; align-items: center; justify-content: center; gap: 20px; ">
   <div style="display: flex; gap: 12px; align-items: center;">
-    <img src="docs/screenshots/portrait1.jpg" width="160" alt="Portrait layout">
+    <img src="docs/screenshots/extension_screenshot.png" width="160" alt="Portrait layout">
     <img src="docs/screenshots/portrait2.jpg" width="160" alt="Portrait layout">
   </div>
   <div>
