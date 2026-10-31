@@ -46,7 +46,7 @@ jobs:
       run: gradle assembleRelease --stacktrace
 
     - name: Rename APK
-      run: cp app/build/outputs/apk/release/app-release.apk "rally-gear-1.2.${{ github.run_number }}.apk"
+      run: cp app/build/outputs/apk/release/app-release.apk "rally-gear-0.6.${{ github.run_number }}.apk"
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
