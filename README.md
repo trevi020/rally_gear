@@ -27,14 +27,14 @@
 - **Engine and oil temperature**.
 
 <div align="center">
-  <table>
+  <table style="border-collapse: collapse; border: none;">
     <tr>
-      <td align="center" valign="middle">
+      <td align="center" valign="middle" style="border: none; background: transparent;">
         <img src="docs/screenshots/portrait1.jpg" width="130" alt="Portrait layout">
         &nbsp;&nbsp;
         <img src="docs/screenshots/portrait2.jpg" width="130" alt="Portrait layout">
       </td>
-      <td align="center" valign="middle">
+      <td align="center" valign="middle" style="border: none; background: transparent;">
         <img src="docs/screenshots/horizontal1.jpg" width="260" alt="Landscape layout">
       </td>
     </tr>
