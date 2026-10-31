@@ -13,23 +13,44 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '17'
 
+    # Installa Gradle 8.5 nel PATH: non serve il gradle wrapper (gradlew) nella repo
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
       with:
         gradle-version: '8.5'
-        cache-disabled: true
 
-    - name: Build Debug APK
-      working-directory: app
-      run: gradle assembleDebug --stacktrace
+    # Ricostruisce il keystore dal secret KEYSTORE_BASE64 (se presente).
+    # Senza secret la build ripiega sulla firma debug (che cambia a ogni esecuzione).
+    - name: Decode keystore
+      env:
+        KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      run: |
+        if [ -n "$KEYSTORE_BASE64" ]; then
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/rallygear.jks"
+          echo "KEYSTORE_PATH=$RUNNER_TEMP/rallygear.jks" >> "$GITHUB_ENV"
+        else
+          echo "::warning::Secret KEYSTORE_BASE64 assente: APK firmato con chiave debug, non aggiornabile sopra una build precedente"
+        fi
+
+    # versionCode = numero dell'esecuzione (GITHUB_RUN_NUMBER), letto da app/build.gradle
+    - name: Build signed release APK
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      run: gradle assembleRelease --stacktrace
+
+    - name: Rename APK
+      run: cp app/build/outputs/apk/release/app-release.apk "rally-gear-1.2.${{ github.run_number }}.apk"
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: rally-gear-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: rally-gear-*.apk
+        if-no-files-found: error
