@@ -26,17 +26,15 @@
 - **Speed** (km/h or mph) with a green glow;
 - **Engine and oil temperature**.
 
-<p align="center">
-  <span style="display: inline-block; vertical-align: middle;">
+<div align="center" style="display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: nowrap;">
+  <div style="display: flex; gap: 10px; align-items: center;">
     <img src="docs/screenshots/portrait1.jpg" width="130" alt="Portrait layout">
-    &nbsp;&nbsp;
     <img src="docs/screenshots/portrait2.jpg" width="130" alt="Portrait layout">
-  </span>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <span style="display: inline-block; vertical-align: middle;">
+  </div>
+  <div>
     <img src="docs/screenshots/horizontal1.jpg" width="260" alt="Landscape layout">
-  </span>
-</p>
+  </div>
+</div>
 
 ### CAN bus data over USB, no OBD dongle
 
